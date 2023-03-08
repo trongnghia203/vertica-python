@@ -1,16 +1,13 @@
 Name:           vertica-python
-Version:        1.3.1
+Version:        1.0.5
 Release:        1%{?dist}
 Summary:        A native Python adapter for the Vertica database
 
-Group:          Development/Languages
 License:        MIT
 URL:            https://github.com/uber/vertica-python
 Source0:        https://github.com/uber/vertica-python/archive/%{version}.tar.gz
 
 BuildArch:      noarch
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
 
 
 %global _description\
@@ -18,65 +15,97 @@ vertica-python is a native Python adapter for the Vertica\
 (http://www.vertica.com) database.\
 
 
-%package -n python3-vertica
-Summary: %summary
-Requires:       python3-dateutil >= 1.5
-Requires:       python3-setuptools
-Requires:       python3-pytz
-Requires:       python3-future
-%{?python_provide:%python_provide python3-vertica}
-# Remove before F30
-Provides: vertica-python3 = %{version}-%{release}
-Obsoletes: vertica-python3 < %{version}-%{release}
+%description %_description
 
-%description -n python3-vertica %_description
+%package -n python%{python3_pkgversion}-vertica
+Summary: %summary
+BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python%{python3_pkgversion}-setuptools
+Requires:       python%{python3_pkgversion}-dateutil >= 1.5
+Requires:       python%{python3_pkgversion}-setuptools
+Requires:       python%{python3_pkgversion}-pytz
+Requires:       python%{python3_pkgversion}-psycopg2
+Requires:       python%{python3_pkgversion}-future
+%{?python_provide:%python_provide python%{python3_pkgversion}-vertica}
+
+%description -n python%{python3_pkgversion}-vertica %_description
 
 
 %prep
 %setup -q -n vertica-python-%{version}
 
+
 %build
 %py3_build
 
+
 %install
 %py3_install
-%files -n python3-vertica
+
+ 
+%files -n python%{python3_pkgversion}-vertica
 %license LICENSE
 %doc README.md
 %{python3_sitelib}/*.egg-info
 %dir %{python3_sitelib}/vertica_python
 %{python3_sitelib}/vertica_python/*
 
+
 %changelog
-* Web Mar 08 2023 Nghia Le <nghia.le@gooddata.com> - 1.0.0-1
-- Build for EL9, No logner python2 support
+* Sat May 14 2022 Jakub Jedelsky <jakub.jedelsky@gmail.com> - 1.0.5-1
+- Bump to new version
+
+* Sat Jan 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.1-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Fri Jul 23 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Fri Jun 04 2021 Python Maint <python-maint@redhat.com> - 1.0.1-3
+- Rebuilt for Python 3.10
+
+* Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Tue Dec 29 2020 Jakub Jedelsky <jakub.jedelsky@gmail.com> - 1.0.1
+- Bump to new version
+
+* Wed Jul 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.10.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Tue May 26 2020 Miro Hrončok <mhroncok@redhat.com> - 0.10.3-2
+- Rebuilt for Python 3.9
 
 * Tue Mar 31 2020 Jakub Jedelsky <jakub.jedelsky@gmail.com> - 0.10.3-1
 - Update to version 0.10.3
+
+* Fri Jan 31 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.10.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
 * Sun Dec 29 2019 Jakub Jedelsky <jakub.jedelsky@gmail.com> - 0.10.1-1
 - Update to version 0.10.1
 
 * Fri Nov 29 2019 Jakub Jedelsky <jakub.jedelsky@gmail.com> - 0.10.0-1
 - Update to version 0.10.0
-- support python3 by default
 
-* Sun Jun 23 2019 Jakub Jedelsky <jakub.jedelsky@gmail.com> - 0.9.3-1
-- Update to version 0.9.3
+* Thu Oct 03 2019 Miro Hrončok <mhroncok@redhat.com> - 0.8.2-4
+- Rebuilt for Python 3.8.0rc1 (#1748018)
 
-* Fri May 10 2019 Jakub Jedelsky <jakub.jedelsky@gmail.com> - 0.9.2-1
-- Upgrade to version 0.9.2
-- Remove of unnecessary requirement (psycopg2)
+* Mon Aug 19 2019 Miro Hrončok <mhroncok@redhat.com> - 0.8.2-3
+- Rebuilt for Python 3.8
 
-* Tue Apr 02 2019 Jakub Jedelsky <jakub.jedelsky@gmail.com> - 0.9.1-1
-- Upgrade to version 0.9.1
-- Fix bad EPEL dependencies of python2 package
-
-* Tue Apr 02 2019 Troy Dawson <tdawson@redhat.com> - 0.8.2-2
-- Rebuilt to change main python from 3.4 to 3.6
+* Sat Jul 27 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.8.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
 * Tue Feb 19 2019 Jakub Jedelsky <jakub.jedelsky@gmail.com> - 0.8.2-1
 - Upgrade to version 0.8.2
+
+* Sun Feb 03 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.7.4-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
+* Mon Jan 14 2019 Miro Hrončok <mhroncok@redhat.com> - 0.7.4-2
+- Subpackage python2-vertica has been removed
+  See https://fedoraproject.org/wiki/Changes/Mass_Python_2_Package_Removal
 
 * Mon Sep 03 2018 Jakub Jedelsky <jakub.jedelsky@gmail.com> - 0.7.4-1
 - Upgrade to version 0.7.4
